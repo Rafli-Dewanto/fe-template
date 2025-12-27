@@ -24,11 +24,11 @@ import { Button } from '@/components/ui/button';
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| variant | 'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link' | 'default' | The visual style of the button |
-| size | 'default' \| 'sm' \| 'lg' \| 'icon' | 'default' | The size of the button |
-| asChild | boolean | false | Whether to render as a child component |
+| Prop    | Type                                                                        | Default   | Description                            |
+| ------- | --------------------------------------------------------------------------- | --------- | -------------------------------------- |
+| variant | 'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link' | 'default' | The visual style of the button         |
+| size    | 'default' \| 'sm' \| 'lg' \| 'icon'                                         | 'default' | The size of the button                 |
+| asChild | boolean                                                                     | false     | Whether to render as a child component |
 
 ## Accessibility
 
@@ -47,20 +47,19 @@ import { Button } from '@/components/ui/button';
 ## Examples
 
 ### Primary Action
+
 ```tsx
-<Button variant="default">
-  Save Changes
-</Button>
+<Button variant="default">Save Changes</Button>
 ```
 
 ### Destructive Action
+
 ```tsx
-<Button variant="destructive">
-  Delete Account
-</Button>
+<Button variant="destructive">Delete Account</Button>
 ```
 
 ### Loading State
+
 ```tsx
 <Button disabled>
   <Loader className="mr-2" />
@@ -69,6 +68,7 @@ import { Button } from '@/components/ui/button';
 ```
 
 ### With Icon
+
 ```tsx
 <Button>
   <PlusIcon className="mr-2 h-4 w-4" />

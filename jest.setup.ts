@@ -1,14 +1,14 @@
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
 // Mock next/navigation
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter() {
     return {
       push: jest.fn(),
       replace: jest.fn(),
       prefetch: jest.fn(),
       back: jest.fn(),
-    }
+    };
   },
   useSearchParams() {
     return {
@@ -20,15 +20,15 @@ jest.mock('next/navigation', () => ({
       keys: jest.fn(),
       values: jest.fn(),
       toString: jest.fn(),
-    }
+    };
   },
-}))
+}));
 
 // Mock next-themes
-jest.mock('next-themes', () => ({
+jest.mock("next-themes", () => ({
   useTheme: () => ({
-    theme: 'light',
+    theme: "light",
     setTheme: jest.fn(),
-    themes: ['light', 'dark'],
+    themes: ["light", "dark"],
   }),
-}))
+}));

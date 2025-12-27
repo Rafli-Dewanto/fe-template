@@ -23,23 +23,28 @@ A modern, feature-rich Next.js template with built-in best practices and utiliti
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone <your-repo-url>
 cd fe-template
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
+
 Edit `.env.local` with your configuration.
 
 4. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -73,19 +78,23 @@ src/
 ## Utilities and Hooks
 
 ### Form Handling
+
 - `useForm` - Type-safe form handling with React Hook Form and Zod
 - Form validation utilities in `utils/validation.ts`
 
 ### Error Handling
+
 - Standardized error handling in `utils/error-handling.ts`
 - Toast notifications for errors
 
 ### Security
+
 - Input sanitization utilities in `utils/sanitization.ts`
 - XSS prevention
 - CSRF protection setup
 
 ### API Integration
+
 - Axios instance setup with interceptors
 - React Query hooks for data fetching
 - API service structure in `services/`

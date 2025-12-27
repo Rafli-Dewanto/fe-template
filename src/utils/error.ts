@@ -11,15 +11,15 @@ export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     // If error is an instance of Error, use its message property.
     message = error.message;
-  } else if (error && typeof error === 'object' && 'message' in error) {
+  } else if (error && typeof error === "object" && "message" in error) {
     // If error is an object and has a 'message' property, convert it to string.
     message = String(error.message);
-  } else if (typeof error === 'string') {
+  } else if (typeof error === "string") {
     // If error is a string, use it directly.
     message = error;
   } else {
     // For all other cases, use a generic error message.
-    message = 'something went wrong';
+    message = "something went wrong";
   }
   return message;
 }

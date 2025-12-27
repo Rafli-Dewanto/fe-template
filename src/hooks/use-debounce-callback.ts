@@ -1,63 +1,69 @@
-import { useEffect, useMemo, useRef } from 'react'
-import debounce from 'lodash.debounce'
-import { useUnmount } from './use-unmount'
+import debounce from "lodash.debounce";
+import { useEffect, useMemo, useRef } from "react";
+
+import { useUnmount } from "./use-unmount";
 
 type DebounceOptions = {
-  leading?: boolean
-  trailing?: boolean
-  maxWait?: number
-}
+  leading?: boolean;
+  trailing?: boolean;
+  maxWait?: number;
+};
 
 type ControlFunctions = {
-  cancel: () => void
-  flush: () => void
-  isPending: () => boolean
-}
+  cancel: () => void;
+  flush: () => void;
+  isPending: () => boolean;
+};
 
-export type DebouncedState<T extends (...args: any) => ReturnType<T>> = ((
-  ...args: Parameters<T>
-) => ReturnType<T> | undefined) &
-  ControlFunctions
+// 1. Changed Generic: Accepts Args and R directly to avoid using 'any' in constraints
+export type DebouncedState<Args extends unknown[], R> = ((...args: Args) => R | undefined) &
+  ControlFunctions;
 
-export function useDebounceCallback<T extends (...args: any) => ReturnType<T>>(
-  func: T,
+export function useDebounceCallback<Args extends unknown[], R>(
+  func: (...args: Args) => R,
   delay = 500,
-  options?: DebounceOptions,
-): DebouncedState<T> {
-  const debouncedFunc = useRef<ReturnType<typeof debounce>>(null)
+  options?: DebounceOptions
+): DebouncedState<Args, R> {
+  const funcRef = useRef(func);
+  const isPendingRef = useRef(false);
 
-  useUnmount(() => {
-    if (debouncedFunc.current) {
-      debouncedFunc.current.cancel()
-    }
-  })
+  useEffect(() => {
+    funcRef.current = func;
+  }, [func]);
 
   const debounced = useMemo(() => {
-    const debouncedFuncInstance = debounce(func, delay, options)
+    const execute = (...args: Args) => {
+      isPendingRef.current = false;
+      return funcRef.current(...args);
+    };
 
-    const wrappedFunc: DebouncedState<T> = (...args: Parameters<T>) => {
-      return debouncedFuncInstance(...args)
-    }
+    const wrapped = debounce(execute, delay, options);
 
-    wrappedFunc.cancel = () => {
-      debouncedFuncInstance.cancel()
-    }
+    const proxy: DebouncedState<Args, R> = (...args: Args) => {
+      isPendingRef.current = true;
+      return wrapped(...args);
+    };
 
-    wrappedFunc.isPending = () => {
-      return !!debouncedFunc.current
-    }
+    proxy.cancel = () => {
+      isPendingRef.current = false;
+      wrapped.cancel();
+    };
 
-    wrappedFunc.flush = () => {
-      return debouncedFuncInstance.flush()
-    }
+    proxy.isPending = () => {
+      return isPendingRef.current;
+    };
 
-    return wrappedFunc
-  }, [func, delay, options])
+    proxy.flush = () => {
+      isPendingRef.current = false;
+      wrapped.flush();
+    };
 
-  // Update the debounced function ref whenever func, wait, or options change
-  useEffect(() => {
-    debouncedFunc.current = debounce(func, delay, options)
-  }, [func, delay, options])
+    return proxy;
+  }, [delay, options]);
 
-  return debounced
+  useUnmount(() => {
+    debounced.cancel();
+  });
+
+  return debounced;
 }

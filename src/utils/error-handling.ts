@@ -1,19 +1,23 @@
-import { toast } from '@/hooks/use-toast';
-import { AxiosError } from 'axios';
+import { AxiosError } from "axios";
+
+import { toast } from "@/hooks/use-toast";
 
 export interface ErrorResponse {
   message: string;
   code?: string;
-  details?: Record<string, any>;
+  // Fix 1: Use 'unknown' instead of 'any' for unknown structures
+  details?: Record<string, unknown>;
 }
 
 export class AppError extends Error {
   code?: string;
-  details?: Record<string, any>;
+  // Fix 2: Update property type
+  details?: Record<string, unknown>;
 
-  constructor(message: string, code?: string, details?: Record<string, any>) {
+  // Fix 3: Update constructor argument type
+  constructor(message: string, code?: string, details?: Record<string, unknown>) {
     super(message);
-    this.name = 'AppError';
+    this.name = "AppError";
     this.code = code;
     this.details = details;
   }
@@ -27,7 +31,7 @@ export const handleApiError = (error: unknown): AppError => {
   if (error instanceof AxiosError) {
     const response = error.response?.data as ErrorResponse | undefined;
     return new AppError(
-      response?.message || 'An unexpected error occurred',
+      response?.message || "An unexpected error occurred",
       response?.code || error.code,
       response?.details
     );
@@ -37,14 +41,14 @@ export const handleApiError = (error: unknown): AppError => {
     return new AppError(error.message);
   }
 
-  return new AppError('An unexpected error occurred');
+  return new AppError("An unexpected error occurred");
 };
 
 export const showErrorToast = (error: unknown) => {
   const appError = handleApiError(error);
   toast({
-    variant: 'destructive',
-    title: 'Error',
+    variant: "destructive",
+    title: "Error",
     description: appError.message,
   });
 };

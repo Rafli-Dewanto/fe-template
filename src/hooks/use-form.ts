@@ -1,10 +1,11 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm as useReactHookForm, UseFormProps } from 'react-hook-form';
-import { z } from 'zod';
-import { showErrorToast } from '@/utils/error-handling';
-import { sanitizeObject } from '@/utils/sanitization';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm as useReactHookForm, UseFormProps } from "react-hook-form";
+import { z } from "zod";
 
-interface UseFormConfig<T extends z.ZodType> extends Omit<UseFormProps<z.infer<T>>, 'resolver'> {
+import { showErrorToast } from "@/utils/error-handling";
+import { sanitizeObject } from "@/utils/sanitization";
+
+interface UseFormConfig<T extends z.ZodType> extends Omit<UseFormProps<z.infer<T>>, "resolver"> {
   schema: T;
   sanitizeInputs?: boolean;
 }
@@ -19,7 +20,7 @@ export const useForm = <T extends z.ZodType>({
     ...formConfig,
   });
 
-  const handleSubmit = form.handleSubmit((data) => {
+  const handleSubmit = form.handleSubmit(data => {
     try {
       const validatedData = schema.parse(data);
       const processedData = sanitizeInputs ? sanitizeObject(validatedData) : validatedData;
